@@ -49,10 +49,14 @@ app.get("/leaderboard/timer", (req, res) => {
   const now = new Date();  // Current time in UTC
   const msRemaining = timerTargetDate.getTime() - now.getTime();
 
+  // Log for debugging
+  console.log("Current Time (UTC):", now.toISOString());
+  console.log("Target Time (UTC):", timerTargetDate.toISOString());
+
   applyCors(res);
   res.json({
-    target: timerTargetDate.toISOString(),  // Target date in UTC
-    now: now.toISOString(),  // Current date in UTC
+    target: timerTargetDate.toISOString(),
+    now: now.toISOString(),
     secondsRemaining: msRemaining > 0 ? Math.floor(msRemaining / 1000) : 0,
     expired: msRemaining <= 0,
   });
