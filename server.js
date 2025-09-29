@@ -49,7 +49,7 @@ app.get("/leaderboard", async (req, res) => {
 });
 
 app.get("/leaderboard/timer", (req, res) => {
-  const now = new Date("2025-09-29T17:30:00Z");
+  const now = new Date();
   const msRemaining = timerTargetDate.getTime() - now.getTime();
 
   applyCors(res);
