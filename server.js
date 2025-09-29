@@ -8,23 +8,19 @@ const app = express();
 
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
 const parseTimerTarget = () => {
-  const envTarget = process.env.LEADERBOARD_TIMER_TARGET;
-  if (envTarget) {
-    const parsed = new Date(envTarget);
-    if (!Number.isNaN(parsed.getTime())) {
-      return parsed;
+  const baseDateString = process.env.LEADERBOARD_TIMER_BASE_DATE;
+  const durationFromEnv = Number(process.env.LEADERBOARD_TIMER_DURATION_DAYS);
+
+  if (baseDateString) {
+    const baseDate = new Date(baseDateString);
+    if (!Number.isNaN(baseDate.getTime())) {
+      const targetDate = new Date(baseDate.getTime() + durationFromEnv * MS_IN_DAY);
+      return targetDate;
     }
-    console.warn(
-      `Invalid LEADERBOARD_TIMER_TARGET value "${envTarget}", falling back to duration.`
-    );
+    console.warn(`Invalid LEADERBOARD_TIMER_BASE_DATE value "${baseDateString}", falling back to duration.`);
   }
 
-  const durationFromEnv = Number(process.env.LEADERBOARD_TIMER_DURATION_DAYS);
-  const durationDays =
-    Number.isFinite(durationFromEnv) && durationFromEnv > 0
-      ? durationFromEnv
-      : 50;
-
+  const durationDays = durationFromEnv > 0 ? durationFromEnv : 50;
   return new Date(Date.now() + durationDays * MS_IN_DAY);
 };
 
