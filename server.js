@@ -15,15 +15,14 @@ const parseTimerTarget = () => {
   if (baseDateString) {
     const baseDate = new Date(baseDateString);
     if (!Number.isNaN(baseDate.getTime())) {
-      // Calculate the target date once and return it
       const targetDate = new Date(baseDate.getTime() + durationFromEnv * MS_IN_DAY);
       return targetDate;
     }
-    console.warn(`Invalid LEADERBOARD_TIMER_BASE_DATE value "${baseDateString}", falling back to duration.`);
   }
 
+  // If base date is missing, calculate a default target date
   const durationDays = durationFromEnv > 0 ? durationFromEnv : 50;
-  return new Date(Date.now() + durationDays * MS_IN_DAY);  // Default fallback if base date is missing
+  return new Date(Date.now() + durationDays * MS_IN_DAY);  // Default fallback
 };
 
 const timerTargetDate = parseTimerTarget();
@@ -49,10 +48,6 @@ app.get("/leaderboard", async (req, res) => {
 app.get("/leaderboard/timer", (req, res) => {
   const now = new Date();  // Current time in UTC
   const msRemaining = timerTargetDate.getTime() - now.getTime();
-
-  // Log for debugging
-  console.log("Current Time (UTC):", now.toISOString());
-  console.log("Target Time (UTC):", timerTargetDate.toISOString());
 
   applyCors(res);
   res.json({
