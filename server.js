@@ -14,6 +14,7 @@ const parseTimerTarget = () => {
   if (baseDateString) {
     const baseDate = new Date(baseDateString);
     if (!Number.isNaN(baseDate.getTime())) {
+      // Add duration in days to the base date, both treated as UTC
       const targetDate = new Date(baseDate.getTime() + durationFromEnv * MS_IN_DAY);
       return targetDate;
     }
@@ -45,13 +46,13 @@ app.get("/leaderboard", async (req, res) => {
 });
 
 app.get("/leaderboard/timer", (req, res) => {
-  const now = new Date();
+  const now = new Date();  // Current time in UTC
   const msRemaining = timerTargetDate.getTime() - now.getTime();
 
   applyCors(res);
   res.json({
-    target: timerTargetDate.toISOString(),
-    now: now.toISOString(),
+    target: timerTargetDate.toISOString(),  // Target date in UTC
+    now: now.toISOString(),  // Current date in UTC
     secondsRemaining: msRemaining > 0 ? Math.floor(msRemaining / 1000) : 0,
     expired: msRemaining <= 0,
   });
