@@ -7,6 +7,7 @@ dotenv.config();
 const app = express();
 
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
+
 const parseTimerTarget = () => {
   const baseDateString = process.env.LEADERBOARD_TIMER_BASE_DATE;
   const durationFromEnv = Number(process.env.LEADERBOARD_TIMER_DURATION_DAYS);
@@ -14,7 +15,7 @@ const parseTimerTarget = () => {
   if (baseDateString) {
     const baseDate = new Date(baseDateString);
     if (!Number.isNaN(baseDate.getTime())) {
-      // Add duration in days to the base date, both treated as UTC
+      // Calculate the target date once and return it
       const targetDate = new Date(baseDate.getTime() + durationFromEnv * MS_IN_DAY);
       return targetDate;
     }
@@ -22,7 +23,7 @@ const parseTimerTarget = () => {
   }
 
   const durationDays = durationFromEnv > 0 ? durationFromEnv : 50;
-  return new Date(Date.now() + durationDays * MS_IN_DAY);
+  return new Date(Date.now() + durationDays * MS_IN_DAY);  // Default fallback if base date is missing
 };
 
 const timerTargetDate = parseTimerTarget();
