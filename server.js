@@ -32,7 +32,7 @@ const applyCors = (res) => {
 };
 
 app.get("/leaderboard", async (req, res) => {
-  const apiUrl = `https://api.skinrave.gg/affiliates/public/applicants?token=${process.env.API_TOKEN}&skip=0&take=10&order=DESC&from=2025-10-10T16:40:45.317Z&to=2025-10-17T16:40:45.317Z`;
+  const apiUrl = `https://api.skinrave.gg/affiliates/public/applicants?token=${process.env.API_TOKEN}&skip=0&take=10&order=DESC&from=2025-10-16T17:58:40.090Z&to=2025-11-16T17:58:40.090Z`;
 
   try {
     const response = await fetch(apiUrl);
